@@ -46,8 +46,12 @@ public class Purchase implements Serializable {
     @JoinColumn(name = "id_user", insertable = false, updatable = false)
     private User user;
 
-    @ManyToMany
-    @JoinColumn(name = "id_product", insertable = false, updatable = false)
+    @JoinTable(
+            name = "purchases_product",
+            joinColumns = @JoinColumn(name = "fk_purchase", nullable = false),
+            inverseJoinColumns = @JoinColumn(name = "fk_product", nullable = false)
+    )
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Product> product;
 
     public Purchase() { }
