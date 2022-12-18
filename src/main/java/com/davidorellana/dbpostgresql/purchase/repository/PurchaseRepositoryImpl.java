@@ -1,5 +1,7 @@
 package com.davidorellana.dbpostgresql.purchase.repository;
 
+import com.davidorellana.dbpostgresql.product.model.data.Product;
+import com.davidorellana.dbpostgresql.product.service.ProductService;
 import com.davidorellana.dbpostgresql.purchase.model.data.Purchase;
 import com.davidorellana.dbpostgresql.purchase.model.dto.PurchaseDto;
 import com.davidorellana.dbpostgresql.user.model.data.User;
@@ -18,6 +20,9 @@ public class PurchaseRepositoryImpl implements PurchaseRepositoryDao {
     @Lazy
     private PurchaseRepository purchaseRepository;
 
+    @Autowired
+    private ProductService productService;
+
     @Override
     public List<Purchase> getAllPurchases() {
         return purchaseRepository.findAll();
@@ -35,6 +40,10 @@ public class PurchaseRepositoryImpl implements PurchaseRepositoryDao {
     @Override
     public Purchase createPurchase(PurchaseDto purchaseDto) {
         Purchase newPurchase = new Purchase(purchaseDto);
+        for (Long productId:purchaseDto.getIdProducts()) {
+            Product productFound = productService.findProductById(productId);
+            newPurchase.addProducts(productFound);
+        }
         return purchaseRepository.save(newPurchase);
     }
 

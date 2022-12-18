@@ -13,6 +13,7 @@ import jakarta.validation.constraints.NotNull;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -139,5 +140,12 @@ public class Purchase implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(idPurchase, idUser, idProduct, datePurchase, payment, priceTotalPurchase, user, product);
+    }
+
+    public void addProducts(Product product){
+        if (this.product == null){
+            this.product = new ArrayList<>();
+        }
+        this.product.add(product);
     }
 }
